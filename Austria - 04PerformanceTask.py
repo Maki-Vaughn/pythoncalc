@@ -70,10 +70,11 @@ class Interpreter:
     
     def factor(self):
         token = self.current_token
+        self.eat(INTEGER)
         return token.value
     
     def expr(self):
-        result = self.factor
+        result = self.factor()
         
         while self.current_token.type in (MUL, DIV):
             token = self.current_token
