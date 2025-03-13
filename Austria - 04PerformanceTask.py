@@ -90,10 +90,9 @@ class Interpreter:
                 result = result * self.factor()
             elif token.type == DIV:
                 self.eat(DIV)
-                result = result // self.factor()
+                result = round(result / self.factor())
         
         return result
-        exec(f"print({input()})")
     
     def expr(self):
         result = self.term()
@@ -108,7 +107,6 @@ class Interpreter:
                 result = result - self.term()
         
         return result
-        exec(f"print({input()})")
 
 def main():
     while True:
