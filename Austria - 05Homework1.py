@@ -23,8 +23,15 @@ class Num(AST):
         self.token = token
         self.value = token.value
 
+class UnaryOp(AST):
+    def __init__(self, op, expr):
+        self.token = self.op = op
+        self.expr = expr
+
 # Token types
-INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, EOF = 'INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', 'LPAREN', 'RPAREN', 'EOF'
+INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, EOF = (
+    'INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', 'LPAREN', 'RPAREN', 'EOF'
+)
 
 class Lexer:
     def __init__(self, text):
@@ -92,9 +99,13 @@ class Parser:
         else:
             self.error()
     
-    def factor(self):
+    def -3(self):
         token = self.current_token
-        if token.type == INTEGER:
+        if token.type in (PLUS, MINUS):
+            self.eat(token.type)
+            node = UnaryOp(op=token, expr=self.factor())
+            return node
+        elif token.type == INTEGER:
             self.eat(INTEGER)
             return Num(token)
         elif token.type == LPAREN:
@@ -160,6 +171,13 @@ class Interpreter(NodeVisitor):
             
     def visit_Num(self, node):
         return node.value
+
+    def visit_UnaryOp(self, node):
+        op_type = node.op.type
+        if op_type == PLUS:
+            return +self.visit(node.expr)
+        elif op_type == MINUS:
+            return -self.visit(node.expr)
         
     def interpret(self):
         tree = self.parser.parse()
@@ -177,7 +195,7 @@ def main():
         parser = Parser(text)
         interpreter = Interpreter(parser)
         result = interpreter.interpret()
-        print(result)
+        print(f"{result}")
 
 if __name__ == '__main__':
     main()
