@@ -99,7 +99,7 @@ class Parser:
         else:
             self.error()
     
-    def -3(self):
+    def factor(self):
         token = self.current_token
         if token.type in (PLUS, MINUS):
             self.eat(token.type)
@@ -195,7 +195,7 @@ def main():
         parser = Parser(text)
         interpreter = Interpreter(parser)
         result = interpreter.interpret()
-        print(f"{result}")
+        print(result)
 
 if __name__ == '__main__':
     main()
